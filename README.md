@@ -37,53 +37,50 @@ This section details the scripts available in the root `package.json` for common
 *   **`bun run test`**: Executes the Jest test suite for all packages. It looks for test files (typically `*.test.ts` or `*.test.tsx`) within each package and runs the tests defined within them, reporting the results.
 ## Release Process (Using Changesets)
 
-This project uses [Changesets](https://github.com/changesets/changesets) to manage versioning, changelogs, and publishing. Follow these steps to prepare and publish a new release:
+This project uses [Changesets](https://github.com/changesets/changesets) to manage versioning, changelogs, and publishing. Follow these steps carefully to prepare and publish a new release:
 
 1.  **Make Code Changes:** Implement your features, bug fixes, or other changes in the relevant package(s).
-2.  **Ensure Quality:**
-    *   Run tests to confirm your changes haven't introduced regressions:
-        ```bash
-        bun run test
-        ```
-    *   Run the linter to check for code style issues:
-        ```bash
-        bun run lint
-        ```
+2.  **Ensure Quality (Recommended):**
+    *   Run tests: `bun run test`
+    *   Run the linter: `bun run lint`
     *   Address any failures before proceeding.
-3.  **Document Changes:** For *each* distinct feature or fix that should be included in the release notes, run:
+3.  **Document Changes:** For *each* distinct change that should appear in the changelog, run:
     ```bash
     bun run add-changeset
     ```
-    *   Follow the prompts: Select the package(s) affected by the change.
-    *   Choose the appropriate SemVer bump (patch, minor, major) for each package.
-    *   Write a clear, concise description of the change. This description will appear in the `CHANGELOG.md`.
-    *   Repeat this step for all individual changes you want to document.
+    *   Follow the prompts to select affected packages, choose the SemVer bump (patch, minor, major), and write a clear description for the changelog.
 4.  **Commit Changesets:** Add the generated markdown files in the `.changeset` directory to Git:
     ```bash
     git add .changeset/
     git commit -m "docs: add changesets for upcoming release"
     ```
-5.  **Version Packages:** Run the version command to consume the changesets, update package versions, and generate changelogs:
+5.  **Version Packages:** Run the version command to consume changesets, update package versions, and generate changelogs:
     ```bash
     bun run version
     ```
-    *   This command updates the `version` field in the `package.json` of affected packages and updates their `CHANGELOG.md` files.
+    *   This updates `package.json` versions and `CHANGELOG.md` files based on the committed changesets.
+    *   **Note on Internal Dependencies:** If you use the `workspace:` protocol for internal dependencies (e.g., `@page-ai/core": "workspace:^"` in `@page-ai/react`'s `package.json`), the `bun run version` command will automatically replace `workspace:^` with the correct fixed version (e.g., `^0.1.1`) of the dependency *if* that dependency is also being versioned in the same release. This ensures the correct versions are written to `package.json` before you commit.
+    *   **Important:** This `version` step must be completed and the resulting changes (updated `package.json` and `CHANGELOG.md` files) must be committed *before* building and publishing. This prevents the `workspace:` protocol from being published to NPM.
 6.  **Review and Commit Versioning:**
-    *   Review the changes made to `package.json` files and `CHANGELOG.md` files to ensure they are correct.
+    *   Review the changes made to `package.json` and `CHANGELOG.md` files to ensure they are correct.
     *   Commit these changes:
         ```bash
-        git add packages/*/package.json packages/*/CHANGELOG.md .changeset/pre.json # Add other relevant files if needed
+        git add packages/*/package.json packages/*/CHANGELOG.md .changeset/pre.json # Adjust if other files were changed by the version command
         git commit -m "chore: bump versions and update changelogs"
         ```
-7.  **Tag Release (Optional but Recommended):** Create a Git tag for the release. It's common practice to tag with the version of the primary package or a general release tag.
+7.  **Build Packages:** Ensure all packages are built with the latest code and correct version numbers before publishing:
     ```bash
-    # Example: git tag v1.2.3
-    # git push --tags
+    bun run build
     ```
-8.  **Publish Packages:** Build the packages and publish the newly versioned ones to NPM:
+8.  **Publish Packages (Manual):** Publish the newly versioned packages to NPM. This step requires you to be logged into NPM (`npm login`) with appropriate permissions.
     ```bash
-    bun run publish
+    bunx changeset publish
     ```
-    *   Ensure you are logged into NPM (`npm login`) with the necessary permissions.
+9.  **Tag Release (Optional but Recommended):** Create and push a Git tag for the release.
+    ```bash
+    # Example: git tag @page-ai/core@0.1.1 # Tag specific package version
+    # Example: git tag release-2025-05-05
+    # git push origin <tag_name> # Or git push --tags
+    ```
 
-This process ensures that versions are bumped correctly based on the documented changes and that changelogs are automatically generated.
+This structured process ensures accurate versioning, automated changelogs, and a clear separation between versioning (`bun run version`), building (`bun run build`), and publishing (`changeset publish`).

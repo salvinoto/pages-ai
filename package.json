@@ -8,7 +8,7 @@
     "build": "cd packages/core && bun run build && cd ../dom && bun run build && cd ../react && bun run build && cd ../..",
     "add-changeset": "changeset add",
     "version": "changeset version",
-    "publish": "bun run build && changeset publish",
+    "publish": "bun run build",
     "dev": "echo \"Starting dev...\"",
     "lint": "eslint . --ext .ts,.tsx",
     "test": "jest"

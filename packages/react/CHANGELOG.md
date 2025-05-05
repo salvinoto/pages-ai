@@ -1,5 +1,11 @@
 # @page-ai/react
 
+## 0.2.0
+
+### Minor Changes
+
+- Patch bug where packages can't be found.
+
 ## 0.1.0
 
 ### Minor Changes
