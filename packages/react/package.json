@@ -1,6 +1,6 @@
 {
   "name": "@page-ai/react",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "main": "dist/index.js",
   "module": "./dist/index.module.js",
   "types": "./dist/index.d.ts",
@@ -18,8 +18,8 @@
     "build": "bun build ./src/index.ts --outfile ./dist/index.module.js --target browser --format esm --dts && bun build ./src/index.ts --outfile ./dist/index.js --target browser --format cjs"
   },
   "dependencies": {
-    "@page-ai/core": "workspace:^",
-    "@page-ai/dom": "workspace:^"
+    "@page-ai/core": "workspace:*",
+    "@page-ai/dom": "workspace:*"
   },
   "peerDependencies": {
     "react": ">=18.0.0 || ^19.0.0"

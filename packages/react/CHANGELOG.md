@@ -1,5 +1,11 @@
 # @page-ai/react
 
+## 0.3.0
+
+### Minor Changes
+
+- Working on issue that prevents installation
+
 ## 0.2.0
 
 ### Minor Changes

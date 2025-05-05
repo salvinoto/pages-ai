@@ -59,7 +59,7 @@ This project uses [Changesets](https://github.com/changesets/changesets) to mana
     bun run version
     ```
     *   This updates `package.json` versions and `CHANGELOG.md` files based on the committed changesets.
-    *   **Note on Internal Dependencies:** If you use the `workspace:` protocol for internal dependencies (e.g., `@page-ai/core": "workspace:^"` in `@page-ai/react`'s `package.json`), the `bun run version` command will automatically replace `workspace:^` with the correct fixed version (e.g., `^0.1.1`) of the dependency *if* that dependency is also being versioned in the same release. This ensures the correct versions are written to `package.json` before you commit.
+    *   **Note on Internal Dependencies:** If you use the `workspace:*` protocol for internal dependencies (e.g., `@page-ai/core": "workspace:*"` in `@page-ai/react`'s `package.json`), the `bun run version` command will automatically replace `workspace:*` with the correct fixed version (e.g., `^0.1.1`) of the dependency *if* that dependency is also being versioned in the same release. This ensures the correct versions are written to `package.json` before you commit.
     *   **Important:** This `version` step must be completed and the resulting changes (updated `package.json` and `CHANGELOG.md` files) must be committed *before* building and publishing. This prevents the `workspace:` protocol from being published to NPM.
 6.  **Review and Commit Versioning:**
     *   Review the changes made to `package.json` and `CHANGELOG.md` files to ensure they are correct.
