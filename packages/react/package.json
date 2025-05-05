@@ -1,0 +1,35 @@
+{
+  "name": "@page-ai/react",
+  "version": "0.0.0",
+  "main": "dist/index.js",
+  "module": "./dist/index.module.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.module.js",
+      "require": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "bun build ./src/index.ts --outfile ./dist/index.module.js --target browser --format esm --dts && bun build ./src/index.ts --outfile ./dist/index.js --target browser --format cjs"
+  },
+  "dependencies": {
+    "@page-ai/core": "workspace:^",
+    "@page-ai/dom": "workspace:^"
+  },
+  "peerDependencies": {
+    "react": "^18.0.0"
+  },
+  "peerDependenciesMeta": {
+    "@types/react": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "@types/react": "^18.0.0"
+  }
+}

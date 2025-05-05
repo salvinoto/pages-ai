@@ -1,0 +1,23 @@
+{
+  "name": "@page-ai/core",
+  "version": "0.0.0",
+  "main": "dist/index.js",
+  "module": "./dist/index.module.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.module.js",
+      "require": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "bun build ./src/index.ts --outfile ./dist/index.module.js --target node --format esm --dts && bun build ./src/index.ts --outfile ./dist/index.js --target node --format cjs"
+  },
+  "dependencies": {
+    "zod": "^3.23.8"
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "compilerOptions": {
+    /* Base Options: */
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "target": "ESNext",
+    "allowJs": true,
+    "resolveJsonModule": true,
+    "moduleDetection": "force",
+    "isolatedModules": true,
+    "jsx": "react-jsx", // Enable React 17+ JSX transform
+
+    /* Strictness */
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+    "forceConsistentCasingInFileNames": true,
+    "declaration": true, // Added for tsc --emitDeclarationOnly
+
+    /* If NOT transpiling code: */
+    "moduleResolution": "Bundler",
+    "module": "ESNext",
+    "noEmit": true, // Re-added to prevent root tsc from emitting files
+
+    /* If your code runs in the DOM: */
+    "lib": ["esnext", "dom", "dom.iterable"],
+
+    /* If your code doesn't run in the DOM: */
+    // "lib": ["esnext"]
+  },
+  "exclude": [
+    "node_modules",
+    "packages/*/dist", // Exclude all dist folders in packages
+    "jest.config.js"   // Exclude Jest config file
+  ]
+  // "include": ["src"] // Add include/exclude patterns as needed later
+}

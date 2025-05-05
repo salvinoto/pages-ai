@@ -1,0 +1,23 @@
+{
+  "name": "@page-ai/dom",
+  "version": "0.0.0",
+  "main": "dist/index.js",
+  "module": "./dist/index.module.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.module.js",
+      "require": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "bun build ./src/index.ts --outfile ./dist/index.module.js --target browser --format esm && bun build ./src/index.ts --outfile ./dist/index.js --target browser --format cjs && tsc src/index.ts --declaration --emitDeclarationOnly --declarationDir dist --noEmit false"
+  },
+  "dependencies": {
+    "domjson": "^0.1.2"
+  }
+}
