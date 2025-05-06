@@ -1,0 +1,16 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "outDir": "./dist",
+    "declarationDir": "./dist",
+    "noEmit": false, // Override root noEmit
+    "lib": ["esnext", "dom", "dom.iterable"] // Ensure DOM libs are included
+  },
+  "include": ["src/**/*"], // Explicitly include only src files
+  "exclude": [
+    "node_modules",
+    "dist",
+    "src/**/*.test.ts", // Exclude test files
+    "src/**/*.test.tsx"
+  ]
+}

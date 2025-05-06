@@ -1,6 +1,6 @@
 {
   "name": "@page-ai/core",
-  "version": "0.1.0",
+  "version": "0.9.0",
   "main": "dist/index.js",
   "module": "./dist/index.module.js",
   "types": "./dist/index.d.ts",
@@ -15,7 +15,7 @@
     "dist"
   ],
   "scripts": {
-    "build": "bun build ./src/index.ts --outfile ./dist/index.module.js --target node --format esm --dts && bun build ./src/index.ts --outfile ./dist/index.js --target node --format cjs"
+    "build": "bun build ./src/index.ts --outfile ./dist/index.module.js --target node --format esm && bun build ./src/index.ts --outfile ./dist/index.js --target node --format cjs && tsc --project tsconfig.build.json --emitDeclarationOnly"
   },
   "dependencies": {
     "zod": "^3.23.8"

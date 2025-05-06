@@ -1,4 +1,4 @@
-'use client'; // This component interacts with context and state, likely client-side
+"use client";
 
 import React from 'react';
 import { usePageAI } from '../hooks';

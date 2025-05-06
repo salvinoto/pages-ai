@@ -59,15 +59,18 @@ This project uses [Changesets](https://github.com/changesets/changesets) to mana
     bun run version
     ```
     *   This updates `package.json` versions and `CHANGELOG.md` files based on the committed changesets.
-    *   **Note on Internal Dependencies:** If you use the `workspace:*` protocol for internal dependencies (e.g., `@page-ai/core": "workspace:*"` in `@page-ai/react`'s `package.json`), the `bun run version` command will automatically replace `workspace:*` with the correct fixed version (e.g., `^0.1.1`) of the dependency *if* that dependency is also being versioned in the same release. This ensures the correct versions are written to `package.json` before you commit.
-    *   **Important:** This `version` step must be completed and the resulting changes (updated `package.json` and `CHANGELOG.md` files) must be committed *before* building and publishing. This prevents the `workspace:` protocol from being published to NPM.
+    *   **Note on Internal Dependencies:** Use `"0.0.0"` as a placeholder version for internal monorepo dependencies (e.g., `"@page-ai/core": "0.0.0"` in `@page-ai/react`'s `package.json`). The `bun run version` command is designed to automatically replace these `"0.0.0"` placeholders with the correct fixed version (e.g., `^0.3.1`) of the dependency *if* that dependency is also being versioned in the same release.
+    *   **Crucial:** This ensures that the correct, synchronized versions are written to `package.json` files before you commit and publish.
 6.  **Review and Commit Versioning:**
-    *   Review the changes made to `package.json` and `CHANGELOG.md` files to ensure they are correct.
-    *   Commit these changes:
+    *   **VERIFY CHANGES:** Before committing, **manually inspect** the `dependencies` section in the relevant `package.json` files (e.g., `packages/react/package.json`). Confirm that `bun run version` has successfully replaced the `"0.0.0"` placeholders with actual version numbers (e.g., `^0.3.1`). **Do not proceed if they still say "0.0.0"!**
+    *   Review the rest of the changes in `package.json` files and `CHANGELOG.md` files.
+    *   Commit the verified changes:
         ```bash
-        git add packages/*/package.json packages/*/CHANGELOG.md .changeset/pre.json # Adjust if other files were changed by the version command
+        # Ensure you add ALL modified package.json and CHANGELOG.md files
+        git add packages/*/package.json packages/*/CHANGELOG.md .changeset/pre.json
         git commit -m "chore: bump versions and update changelogs"
         ```
+    *   **If verification fails** (placeholders weren't replaced), investigate potential issues with your Changesets setup or the `bun run version` execution before attempting to publish. Publishing with `"0.0.0"` or `workspace:*` will break installation for users.
 7.  **Build Packages:** Ensure all packages are built with the latest code and correct version numbers before publishing:
     ```bash
     bun run build

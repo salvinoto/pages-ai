@@ -1,3 +1,4 @@
+"use client";
 import { usePageAIContext } from './context';
 
 /**

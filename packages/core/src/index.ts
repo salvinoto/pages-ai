@@ -41,11 +41,14 @@ export {
     executeUndo,
     // ExecutionContext, // Export type separately below
     ExecutionError,
-    // Note: InverseOperation and Mutation are internal concepts for now,
-    // but could be exported if needed for advanced integration.
-    // export type { Mutation, InverseOperation } from './engine';
 } from './engine';
-export type { ExecutionContext } from './engine'; // Use 'export type'
+// Export necessary types from engine
+export type {
+    ExecutionContext,
+    CommandHandlerMap,
+    InverseOperation,
+    Mutation // Export Mutation as well, might be useful
+} from './engine';
 
 // --- Edge-Safe Helpers ---
 export {

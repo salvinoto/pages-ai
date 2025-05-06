@@ -1,0 +1,16 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "outDir": "./dist", // Specify outDir for build context if needed, though declarationDir might suffice
+    "declarationDir": "./dist", // Ensure declaration files go here
+    "noEmit": false // Override root noEmit for this build
+    // Remove composite if it exists in root, as it's not needed here
+  },
+  "include": ["src/**/*"], // Explicitly include only src files
+  "exclude": [
+    "node_modules",
+    "dist",
+    "src/**/*.test.ts", // Exclude test files
+    "src/**/*.test.tsx"
+  ]
+}

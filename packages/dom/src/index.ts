@@ -11,3 +11,5 @@ export type { DomPatch, PatchCallback } from './observer';
 // Potentially add a higher-level function or class here later
 // that combines serialization and observation if needed.
 // For now, exporting the building blocks as per requirements.
+// Export command handlers
+export * from './handlers';
