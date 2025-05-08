@@ -41,22 +41,43 @@ function App() {
 export default App;
 ```
 
-**2. Access Page-AI in components:**
+**2. Access Page-AI state and dispatch commands:**
 
-Use the `usePageAI` hook to interact with the Page-AI engine.
+Use the `usePageAI` hook (or `usePageAIContext`) to access the DOM snapshot, patches, and the `dispatchCommand` function.
 
 ```jsx
-import { usePageAI } from '@page-ai/react';
+'use client'; // Required if dispatching commands or using state/effects
+
+import { usePageAI } from '@page-ai/react'; // Or usePageAIContext
+import { useState } from 'react';
 
 function MyInteractiveComponent() {
-  const { engine, state } = usePageAI();
+  // Get snapshot, patches, and the command dispatcher from the hook
+  const { snapshot, patches, dispatchCommand } = usePageAI();
+  const [commandStatus, setCommandStatus] = useState('');
 
-  // Use the engine to execute commands or get information
-  // Access the current state (e.g., serialized DOM, available tools)
+  const handleButtonClick = async () => {
+    setCommandStatus('Executing...');
+    try {
+      const command = { type: 'click', selector: '#my-button-id' };
+      // Use the dispatchCommand function provided by the hook
+      await dispatchCommand(command);
+      setCommandStatus('Click command dispatched successfully!');
+    } catch (error) {
+      console.error("Dispatch error:", error);
+      setCommandStatus(`Error: ${error instanceof Error ? error.message : 'Unknown error'}`);
+    }
+  };
 
   return (
     <div>
-      {/* Your component UI */}
+      <button id="my-button-id" onClick={handleButtonClick}>
+        Dispatch AI Click
+      </button>
+      <p>Status: {commandStatus}</p>
+
+      {/* Display snapshot or patches */}
+      {/* <pre>{JSON.stringify(snapshot, null, 2)}</pre> */}
     </div>
   );
 }

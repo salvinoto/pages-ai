@@ -6,6 +6,7 @@ This package handles interaction with the browser's Document Object Model (DOM) 
 
 *   **DOM Serialization:** Provides mechanisms to serialize the relevant parts of the DOM into a format that AI models can understand.
 *   **MutationObserver Diffing:** Uses `MutationObserver` to efficiently detect changes in the DOM and generate concise diffs, minimizing the data sent to the AI model.
+*   **Command Handlers:** Exports functions (`handleClick`, `handleFill`, `handleSetAttr`) that perform the actual DOM manipulation for core AI commands. These are typically used by an integration layer like `@page-ai/react`.
 
 ## Installation
 

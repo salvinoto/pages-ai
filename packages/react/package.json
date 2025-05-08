@@ -1,6 +1,6 @@
 {
   "name": "@page-ai/react",
-  "version": "0.12.0",
+  "version": "0.13.0",
   "main": "dist/index.js",
   "module": "./dist/index.module.js",
   "types": "./dist/index.d.ts",
@@ -18,8 +18,9 @@
     "build": "bun build ./src/index.ts --outfile ./dist/index.module.js --target browser --format esm --external react --external react-dom && bun build ./src/index.ts --outfile ./dist/index.js --target browser --format cjs --external react --external react-dom && tsc --project tsconfig.build.json --emitDeclarationOnly"
   },
   "dependencies": {
-    "@page-ai/core": "0.9.0",
-    "@page-ai/dom": "0.9.0"
+    "@page-ai/core": "0.10.0",
+    "@page-ai/dom": "0.10.0",
+    "@page-ai/scanner": "0.1.0"
   },
   "peerDependencies": {
     "react": ">=18.0.0 || ^19.0.0",

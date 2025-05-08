@@ -44,7 +44,20 @@ module.exports = {
       },
       testMatch: ['<rootDir>/src/**/*.test.ts', '<rootDir>/src/**/*.test.tsx'],
       // Add setup file if needed for React Testing Library etc.
-      // setupFilesAfterEnv: ['<rootDir>/src/setupTests.ts'],
+      setupFilesAfterEnv: ['<rootDir>/src/setupTests.ts'],
+    },
+{
+      displayName: 'scanner',
+      preset: 'ts-jest',
+      rootDir: '<rootDir>/packages/scanner',
+      testEnvironment: 'jsdom',
+      moduleNameMapper: {
+        '^@page-ai/core$': '<rootDir>/../core/src/index.ts',
+        '^@page-ai/scanner$': '<rootDir>/src/index.ts',
+      },
+      modulePaths: ['<rootDir>/../../node_modules'], // Point to the root node_modules
+      testMatch: ['<rootDir>/src/**/*.test.ts', '<rootDir>/src/**/*.test.tsx'],
+      setupFilesAfterEnv: ['<rootDir>/src/setupTests.ts'],
     },
   ],
   // Optional: Collect coverage

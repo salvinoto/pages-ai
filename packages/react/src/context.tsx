@@ -2,6 +2,7 @@
 
 import React, { createContext, useContext, useEffect, useState, useRef, ReactNode, useCallback } from 'react';
 import { DomObserver, serializeNode, handleClick, handleFill, handleSetAttr } from '@page-ai/dom'; // Import handlers
+import { scanInteractiveElements, InteractiveElement } from '@page-ai/scanner';
 import type { DomPatch, DomSnapshot } from '@page-ai/dom';
 import { executeCommand } from '@page-ai/core'; // Import core executor
 import type { ExecutionContext, CommandHandlerMap, InverseOperation, AICommand } from '@page-ai/core'; // Import core types
@@ -13,6 +14,7 @@ export interface PageAIContextValue { // Export the interface
   dispatchCommand: (command: AICommand) => Promise<void>;
   isDevToolsEnabled: boolean;
   toggleDevTools: () => void;
+  interactiveElements: InteractiveElement[];
 }
 
 const PageAIContext = createContext<PageAIContextValue | undefined>(undefined);
@@ -35,6 +37,7 @@ export const PageAIProvider: React.FC<PageAIProviderProps> = ({
   const [snapshot, setSnapshot] = useState<DomSnapshot | null>(null);
   const [patches, setPatches] = useState<DomPatch[]>([]);
   const [isDevToolsEnabled, setIsDevToolsEnabled] = useState(false);
+  const [interactiveElements, setInteractiveElements] = useState<InteractiveElement[]>([]);
   const [isClientReady, setIsClientReady] = useState(false); // State to track client readiness
   // State for the effective root element, defaulting if on client and prop is null/undefined
   const [effectiveRootElement, setEffectiveRootElement] = useState<Element | Document | DocumentFragment | null>(rootElementProp ?? null);
@@ -65,12 +68,28 @@ export const PageAIProvider: React.FC<PageAIProviderProps> = ({
   }, []);
 
   useEffect(() => {
-    // Determine effective root element only on client
-    if (isClientReady && !effectiveRootElement) {
-      setEffectiveRootElement(document.body);
+    // Phase 1: Determine effectiveRootElement.
+    let currentRoot: Element | Document | DocumentFragment | null = rootElementProp ?? null;
+    if (!currentRoot && typeof window !== 'undefined') {
+      currentRoot = document.body;
     }
 
-    // Initialize execution context only once
+    // If effectiveRootElement state is different from what it should be, update it.
+    // This triggers a re-render and this effect will run again with the new state.
+    if (currentRoot !== effectiveRootElement) {
+      setEffectiveRootElement(currentRoot);
+      return; // Allow re-render to pick up the new effectiveRootElement
+    }
+
+    // If, after attempting to set, we still don't have an effective root, we can't proceed.
+    if (!effectiveRootElement) {
+      // This might happen if rootElementProp was null and we're not in a client env.
+      return;
+    }
+
+    // Phase 2: Setup observer and mark client as ready.
+    // This part runs once effectiveRootElement is stable and non-null.
+    
     if (!executionContextRef.current) {
         executionContextRef.current = {
             undoStack: [],
@@ -78,30 +97,21 @@ export const PageAIProvider: React.FC<PageAIProviderProps> = ({
         };
     }
 
-    // Only proceed if we have an effective root element
-    if (!effectiveRootElement) {
-      return; // Don't initialize observer etc. if no root element yet
+    // Initialize and start the observer. The cleanup function will handle disconnect.
+    observerRef.current = new DomObserver(handlePatches);
+    console.log('PageAIProvider: Starting observer on:', effectiveRootElement.nodeName); // Modified original log
+    observerRef.current.observe(effectiveRootElement, observerOptions);
+    
+    if (!isClientReady) {
+        setIsClientReady(true);
     }
 
-    // Initialize Observer with the callback
-    observerRef.current = new DomObserver(handlePatches);
-
-    // Start observing
-    console.log('PageAIProvider: Starting observer...');
-    observerRef.current.observe(effectiveRootElement, observerOptions);
-
-    // Set client ready state after mount
-    setIsClientReady(true);
-
-    // NOTE: Initial snapshot generation moved to the isClientReady effect
-
     return () => {
-      console.log('PageAIProvider: Disconnecting observer...');
+      console.log('PageAIProvider: Disconnecting observer...'); // Original log
       observerRef.current?.disconnect();
-      // window.removeEventListener('popstate', checkDevToolsParam);
+      observerRef.current = null;
     };
-    // Ensure dependencies are correct
-  }, [observerOptions, effectiveRootElement, handlePatches, isClientReady]); // Added isClientReady, use effectiveRootElement
+  }, [rootElementProp, effectiveRootElement, observerOptions, handlePatches, isClientReady]);
 
   // Wrap checkDevToolsParam in useCallback
   const checkDevToolsParam = useCallback(() => {
@@ -122,6 +132,8 @@ export const PageAIProvider: React.FC<PageAIProviderProps> = ({
       const initialSnapshot = serializeNode(effectiveRootElement);
       setSnapshot(initialSnapshot);
       setPatches([]); // Clear patches on new snapshot
+      const scannedElements = scanInteractiveElements(effectiveRootElement as HTMLElement); // Assuming effectiveRootElement is HTMLElement or similar
+      setInteractiveElements(scannedElements);
 
       // Optionally listen for history changes if using SPA routing
       // window.addEventListener('popstate', checkDevToolsParam);
@@ -161,6 +173,7 @@ export const PageAIProvider: React.FC<PageAIProviderProps> = ({
     dispatchCommand, // Provide the dispatch function
     isDevToolsEnabled,
     toggleDevTools,
+    interactiveElements,
   };
 
   return (

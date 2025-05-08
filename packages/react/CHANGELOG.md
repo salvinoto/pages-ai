@@ -1,5 +1,18 @@
 # @page-ai/react
 
+## 0.13.0
+
+### Minor Changes
+
+- Added scanner packagge for AI tools
+
+### Patch Changes
+
+- Updated dependencies
+  - @page-ai/scanner@0.1.0
+  - @page-ai/core@0.10.0
+  - @page-ai/dom@0.10.0
+
 ## 0.12.0
 
 ### Minor Changes

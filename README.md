@@ -18,6 +18,78 @@ Install the necessary packages using your preferred package manager. For example
 bun add @page-ai/react @page-ai/core @page-ai/dom
 ```
 
+## Basic Usage Example (React / Next.js)
+
+This example shows how to integrate Page-AI into a React component to observe the DOM and dispatch commands.
+
+**1. Set up the Provider:**
+
+Wrap your application or relevant layout component with `PageAIProvider`. For Next.js App Router, you might use the `ClientWrapper` which includes the provider and ensures client-side execution.
+
+```jsx
+// Example: app/layout.tsx (Next.js App Router)
+import { ClientWrapper } from '@page-ai/react'; // Includes PageAIProvider
+
+export default function RootLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <html lang="en">
+      <body>
+        {/* Wrap the part of the tree you want Page-AI to manage */}
+        <ClientWrapper>
+          {children}
+          {/* Optionally include DevTools during development */}
+          {process.env.NODE_ENV === 'development' && <AIDevTools />}
+        </ClientWrapper>
+      </body>
+    </html>
+  );
+}
+```
+
+**2. Use the Hook and Dispatch Commands:**
+
+In a component *within* the provider tree (and marked with `"use client"`), use the `usePageAI` hook to access the DOM state and the `dispatchCommand` function.
+
+```jsx
+// Example: components/MyInteractiveUI.tsx
+'use client'; // Required for hooks and event handlers
+
+import { usePageAI } from '@page-ai/react';
+import { useState } from 'react';
+
+export function MyInteractiveUI() {
+  const { snapshot, patches, dispatchCommand } = usePageAI();
+  const [status, setStatus] = useState('');
+
+  const handleSimulateAIClick = async () => {
+    setStatus('Dispatching click...');
+    try {
+      // Define the command based on @page-ai/core schemas
+      const command = { type: 'click', selector: '#login-button' };
+      // Dispatch the command using the function from the hook
+      await dispatchCommand(command);
+      setStatus('Click command dispatched!');
+    } catch (error) {
+      console.error('Command dispatch failed:', error);
+      setStatus(`Error: ${error instanceof Error ? error.message : 'Unknown error'}`);
+    }
+  };
+
+  return (
+    <div>
+      <button id="login-button">Login</button>
+      <button onClick={handleSimulateAIClick}>Simulate AI Click Login</button>
+      <p>Status: {status}</p>
+      {/* You can display snapshot or patches here for debugging */}
+      {/* <pre>Snapshot: {JSON.stringify(snapshot, null, 2)}</pre> */}
+    </div>
+  );
+}
+
+```
+
+This setup allows your application components to trigger AI-like interactions with the DOM through the Page-AI SDK.
+
 ## Development Commands
 
 This section details the scripts available in the root `package.json` for common development tasks:

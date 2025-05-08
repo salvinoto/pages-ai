@@ -1,5 +1,11 @@
 # @page-ai/dom
 
+## 0.10.0
+
+### Minor Changes
+
+- Added scanner packagge for AI tools
+
 ## 0.9.0
 
 ### Minor Changes

@@ -1,0 +1,31 @@
+{
+  "name": "@page-ai/scanner",
+  "version": "0.1.0",
+  "description": "Client-side library to scan and identify interactive UI elements in a live DOM.",
+  "main": "./dist/index.js",
+  "module": "./dist/index.module.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.module.js",
+      "require": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "bun build ./src/index.ts --outfile ./dist/index.module.js --target browser --format esm --external @page-ai/core && bun build ./src/index.ts --outfile ./dist/index.js --target browser --format cjs --external @page-ai/core && tsc --project tsconfig.build.json --emitDeclarationOnly"
+  },
+  "dependencies": {
+    "@page-ai/core": "workspace:*"
+  },
+  "devDependencies": {
+    "@testing-library/jest-dom": "*"
+  },
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  }
+}
