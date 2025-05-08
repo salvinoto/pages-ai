@@ -1,6 +1,6 @@
 {
   "name": "@page-ai/react",
-  "version": "0.13.0",
+  "version": "0.13.1",
   "main": "dist/index.js",
   "module": "./dist/index.module.js",
   "types": "./dist/index.d.ts",
@@ -20,7 +20,7 @@
   "dependencies": {
     "@page-ai/core": "0.10.0",
     "@page-ai/dom": "0.10.0",
-    "@page-ai/scanner": "0.1.0"
+    "@page-ai/scanner": "0.2.0"
   },
   "peerDependencies": {
     "react": ">=18.0.0 || ^19.0.0",

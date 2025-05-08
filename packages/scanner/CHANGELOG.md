@@ -1,5 +1,11 @@
 # @page-ai/scanner
 
+## 0.2.0
+
+### Minor Changes
+
+- Fix package deps error
+
 ## 0.1.0
 
 ### Minor Changes

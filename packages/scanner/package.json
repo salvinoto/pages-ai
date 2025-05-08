@@ -19,7 +19,7 @@
     "build": "bun build ./src/index.ts --outfile ./dist/index.module.js --target browser --format esm --external @page-ai/core && bun build ./src/index.ts --outfile ./dist/index.js --target browser --format cjs --external @page-ai/core && tsc --project tsconfig.build.json --emitDeclarationOnly"
   },
   "dependencies": {
-    "@page-ai/core": "workspace:*"
+    "@page-ai/core": "0.10.0"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "*"
